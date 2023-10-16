@@ -1,6 +1,6 @@
 Class {
 	#name : #BaselineOfPharoHuggingFace,
-	#superclass : #Object,
+	#superclass : #BaselineOf,
 	#category : #BaselineOfPharoHuggingFace
 }
 

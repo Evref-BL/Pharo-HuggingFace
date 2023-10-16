@@ -3,7 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'apiKey',
-		'model'
+		'model',
+		'return_full_text',
+		'max_new_tokens',
+		'max_time'
 	],
 	#classInstVars : [
 		'apiKey',
@@ -78,6 +81,30 @@ HFAPI >> initialize [
 ]
 
 { #category : #accessing }
+HFAPI >> max_new_tokens [
+
+	^ max_new_tokens
+]
+
+{ #category : #accessing }
+HFAPI >> max_new_tokens: anObject [
+
+	max_new_tokens := anObject
+]
+
+{ #category : #accessing }
+HFAPI >> max_time [
+
+	^ max_time
+]
+
+{ #category : #accessing }
+HFAPI >> max_time: anObject [
+
+	max_time := anObject
+]
+
+{ #category : #accessing }
 HFAPI >> model [
 
 	^ model
@@ -89,19 +116,38 @@ HFAPI >> model: anObject [
 	model := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 HFAPI >> query: aTextQuery [
 
-	| znClient command |
+	| znClient command paramDic |
 	znClient := ZnEasy client.
 	znClient https.
 	znClient forJsonREST.
 	znClient headerAt: #Authorization put: 'Bearer ' , self apiKey.
 	znClient host: 'api-inference.huggingface.co'.
 	znClient path: '/models/mistralai/' , self model.
-	command := '[INST]' , aTextQuery , '[/INST]'.
-	znClient entity: (ZnEntity json:
-			 (NeoJSONWriter toString: { (#inputs -> command) } asDictionary)).
-	^ (znClient post anyOne at: #generated_text) allButFirst:
-		  command size
+	command := Dictionary new.
+	command at: #inputs put: '[INST]' , aTextQuery , '[/INST]'.
+	paramDic := command at: #parameters put: Dictionary new.
+	self return_full_text ifNotNil: [ :val |
+		paramDic at: #return_full_text put: val ].
+	self max_new_tokens ifNotNil: [ :val |
+		paramDic at: #max_new_tokens put: val ].
+	self max_time ifNotNil: [ :val | paramDic at: #max_time put: val ].
+
+	znClient entity: (ZnEntity json: (NeoJSONWriter toString: command)).
+
+	^ znClient post anyOne at: #generated_text
+]
+
+{ #category : #accessing }
+HFAPI >> return_full_text [
+
+	^ return_full_text
+]
+
+{ #category : #accessing }
+HFAPI >> return_full_text: anObject [
+
+	return_full_text := anObject
 ]

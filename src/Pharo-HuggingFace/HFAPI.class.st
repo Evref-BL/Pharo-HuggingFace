@@ -6,7 +6,9 @@ Class {
 		'model',
 		'return_full_text',
 		'max_new_tokens',
-		'max_time'
+		'max_time',
+		'temperature',
+		'num_return_sequences'
 	],
 	#classInstVars : [
 		'apiKey',
@@ -116,6 +118,18 @@ HFAPI >> model: anObject [
 	model := anObject
 ]
 
+{ #category : #accessing }
+HFAPI >> num_return_sequences [
+
+	^ num_return_sequences
+]
+
+{ #category : #accessing }
+HFAPI >> num_return_sequences: anObject [
+
+	num_return_sequences := anObject
+]
+
 { #category : #api }
 HFAPI >> query: aTextQuery [
 
@@ -134,6 +148,10 @@ HFAPI >> query: aTextQuery [
 	self max_new_tokens ifNotNil: [ :val |
 		paramDic at: #max_new_tokens put: val ].
 	self max_time ifNotNil: [ :val | paramDic at: #max_time put: val ].
+	self temperature ifNotNil: [ :val |
+		paramDic at: #temperature put: val ].
+	self num_return_sequences ifNotNil: [ :val |
+		paramDic at: #num_return_sequences put: val ].
 
 	znClient entity: (ZnEntity json: (NeoJSONWriter toString: command)).
 
@@ -150,4 +168,16 @@ HFAPI >> return_full_text [
 HFAPI >> return_full_text: anObject [
 
 	return_full_text := anObject
+]
+
+{ #category : #accessing }
+HFAPI >> temperature [
+
+	^ temperature
+]
+
+{ #category : #accessing }
+HFAPI >> temperature: anObject [
+
+	temperature := anObject
 ]

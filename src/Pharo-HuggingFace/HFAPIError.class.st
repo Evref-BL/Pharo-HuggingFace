@@ -1,6 +1,5 @@
 Class {
-	#name : 'HFAPIError',
-	#superclass : 'Error',
-	#category : 'Pharo-HuggingFace',
-	#package : 'Pharo-HuggingFace'
+	#name : #HFAPIError,
+	#superclass : #Error,
+	#category : 'Pharo-HuggingFace'
 }

@@ -1,6 +1,6 @@
 Class {
-	#name : 'HFAPI',
-	#superclass : 'Object',
+	#name : #HFAPI,
+	#superclass : #Object,
 	#instVars : [
 		'apiKey',
 		'model',
@@ -14,35 +14,34 @@ Class {
 		'apiKey',
 		'defaultModel'
 	],
-	#category : 'Pharo-HuggingFace',
-	#package : 'Pharo-HuggingFace'
+	#category : #'Pharo-HuggingFace'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI class >> apiKey [
 
 	^ apiKey
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI class >> apiKey: anObject [
 
 	apiKey := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI class >> defaultModel [
 
 	^ defaultModel
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI class >> defaultModel: anObject [
 
 	defaultModel := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI class >> huggingFaceSettings: aBuilder [
 
 	<systemsettings>
@@ -63,19 +62,19 @@ HFAPI class >> huggingFaceSettings: aBuilder [
 				ghostHelp: 'Model name' ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> apiKey [
 
 	^ apiKey
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> apiKey: anObject [
 
 	apiKey := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> initialize [
 
 	super initialize.
@@ -83,55 +82,55 @@ HFAPI >> initialize [
 	self model: self class defaultModel
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> max_new_tokens [
 
 	^ max_new_tokens
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> max_new_tokens: anObject [
 
 	max_new_tokens := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> max_time [
 
 	^ max_time
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> max_time: anObject [
 
 	max_time := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> model [
 
 	^ model
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> model: anObject [
 
 	model := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> num_return_sequences [
 
 	^ num_return_sequences
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> num_return_sequences: anObject [
 
 	num_return_sequences := anObject
 ]
 
-{ #category : 'api' }
+{ #category : #api }
 HFAPI >> query: aTextQuery [
 
 	| znClient command paramDic result |
@@ -156,29 +155,33 @@ HFAPI >> query: aTextQuery [
 
 	znClient entity: (ZnEntity json: (NeoJSONWriter toString: command)).
 	result := znClient post.
-	result at: #error ifPresent: [ :err | HFAPIError signal: err ].
+	result isArray ifFalse: [
+		result
+			at: #error
+			ifPresent: [ :err | HFAPIError signal: err ]
+			ifAbsent: [ self error: 'To improve' ] ].
 	^ znClient post anyOne at: #generated_text
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> return_full_text [
 
 	^ return_full_text
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> return_full_text: anObject [
 
 	return_full_text := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> temperature [
 
 	^ temperature
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HFAPI >> temperature: anObject [
 
 	temperature := anObject

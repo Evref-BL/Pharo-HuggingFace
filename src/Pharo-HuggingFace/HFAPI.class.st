@@ -54,11 +54,12 @@ HFAPI class >> huggingFaceSettings: aBuilder [
 				target: self;
 				default: '';
 				ghostHelp: 'My key'.
-			(aBuilder setting: #defaultModel)
+			(aBuilder pickOne: #defaultModel)
 				order: -100000;
 				label: 'HuggingFace Default model';
 				target: self;
-				default: 'Mistral-7B-Instruct-v0.1';
+				default: HFModel;
+				domainValues: HFModel withAllSubclasses;
 				ghostHelp: 'Model name' ]
 ]
 
@@ -79,7 +80,7 @@ HFAPI >> initialize [
 
 	super initialize.
 	self apiKey: self class apiKey.
-	self model: self class defaultModel
+	self model: self class defaultModel new
 ]
 
 { #category : #accessing }
@@ -139,9 +140,9 @@ HFAPI >> query: aTextQuery [
 	znClient forJsonREST.
 	znClient headerAt: #Authorization put: 'Bearer ' , self apiKey.
 	znClient host: 'api-inference.huggingface.co'.
-	znClient path: '/models/mistralai/' , self model.
+	znClient path: '/models/' , self model name.
 	command := Dictionary new.
-	command at: #inputs put: '[INST]' , aTextQuery , '[/INST]'.
+	command at: #inputs put: (self model buildQuery: aTextQuery).
 	paramDic := command at: #parameters put: Dictionary new.
 	self return_full_text ifNotNil: [ :val |
 		paramDic at: #return_full_text put: val ].

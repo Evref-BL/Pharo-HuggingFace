@@ -58,7 +58,7 @@ HFAPI class >> huggingFaceSettings: aBuilder [
 				order: -100000;
 				label: 'HuggingFace Default model';
 				target: self;
-				default: HFModel;
+				default: HFCodeLlama34bInstructModel;
 				domainValues: HFModel withAllSubclasses;
 				ghostHelp: 'Model name' ]
 ]

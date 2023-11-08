@@ -148,7 +148,7 @@ HFAPI >> query: aTextQuery [
 		paramDic at: #return_full_text put: val ].
 	self max_new_tokens ifNotNil: [ :val |
 		paramDic at: #max_new_tokens put: val ].
-	self max_time ifNotNil: [ :val | paramDic at: #max_time put: val ].
+	self max_time ifNotNil: [ :val | paramDic at: #max_time put: val asFloat ].
 	self temperature ifNotNil: [ :val |
 		paramDic at: #temperature put: val ].
 	self num_return_sequences ifNotNil: [ :val |
